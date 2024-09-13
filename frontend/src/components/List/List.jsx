@@ -48,9 +48,10 @@ export default function List({
 
         if (response.ok) {
           const data = await response.json();
+          console.log({ data });
           setBookmarks(data);
         } else {
-          console.error("Error :", response.status);
+          console.log("Error :", response.status);
         }
       } catch (error) {
         console.log("Error fetching bookmarks");

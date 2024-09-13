@@ -1,14 +1,8 @@
 import React from "react";
-import './Home.css';
-import Navbar from '../../components/Navbar/Navbar';
-import Footer from '../../components/Footer/Footer';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faMapMarkedAlt,faUtensils , faHotel} from '@fortawesome/free-solid-svg-icons'; 
-import GlobeExchange from '../../assets/Home/GlobeExchange.png';
-import RouteFinder from '../../assets/Home/RouteFinder.png';
-import SafeLink from '../../assets/Home/SafeLink.png';
-import WeatherGuide from '../../assets/Home/WeatherGuide.png';
-import { useNavigate, Link } from "react-router-dom";
+import "bootstrap/dist/css/bootstrap.min.css";
+import backgroundVideo from "../../istockphoto-1362880565-640_adpp_is.mp4";
+import "./Home.css";
+import { useNavigate } from "react-router-dom";
 
 export default function Home() {
   const navigate = useNavigate();
@@ -16,80 +10,71 @@ export default function Home() {
   const handleFindRoute = () => {
     navigate("/find-route");
   };
-  const handleConvertCurrency = () => {
-    navigate("/currency-converter");
-  };
-  const handleEmergencyConnect = () => {
-    navigate("/emergency-connector");
-  };
-  const handleWeather = () => {
-    navigate("/weather");
+
+  const handleFindHotel = () => {
+    navigate("/find-hotel");
   };
 
+  const handleFindRestaurant = () => {
+    navigate("/find-restaurant");
+  };
+
+  const btnStyle = {
+    backgroundColor: "#007bff",
+    color: "#ffffff",
+    border: "none",
+    padding: "10px 20px",
+    cursor: "pointer",
+    borderRadius: "4px",
+    marginRight: "16px", // Adjust the margin here
+  };
   return (
-    <>
-            <Navbar/>
-            <div className="home-container">
-                <header className="home-header">
-                    <h1 className='title'>Personalize Your <br/>Travel Schedule</h1>
-                    <p className='title-paragraph'>Welcome to Tour Mate, your ultimate travel planning companion! Whether you're embarking on a solo adventure or <br/>
-                    planning a family trip, Tour Mate is here to help you create personalized travel schedules with ease. Start by <br/>
-                    entering your starting point and destination, and let us take care of the rest.</p>
-                    
-                    {/* ---------------Three Columns Section------------------- */}
-                    <div className="home-container-columns">
-                        <div className="home-column">
-                            <FontAwesomeIcon icon={faMapMarkedAlt} size="3x" />
-                            <h3>Personalized Tour Planing</h3>
-                        </div>
-                        <div className="home-column">
-                            <FontAwesomeIcon icon={faUtensils} size="3x" />
-                            <h3>Find Restaurants</h3>
-                        </div>
-                        <div className="home-column">
-                            <FontAwesomeIcon icon={faHotel} size="3x" />
-                            <h3>Find Hotels</h3>
-                        </div>
-                    </div>
-                    <div className='login-paragraph'>
-                        <p>Welcome back, Traveler! Ready to continue your journey?</p>
-                        <Link to="/login">
-                        <button className="login-button">Log IN</button></Link>
-                        
-                    </div>
-                </header>
-            </div>
-
-            <div className="explore-container">
-                    <div className='explore-container-columns'>
-                        <div className='explore-column'>
-                            <h3>Route Finder</h3>
-                            <img src={RouteFinder} alt="Route Finder" className="explore-img"/>
-                            <p>Discover the best route between two locations, including your current location, to navigate your journey efficiently.</p>
-                            <button className='explore-btn' onClick={handleFindRoute}>Find Route</button>
-                        </div>
-                        <div className='explore-column'>
-                            <h3>Weather Guide</h3>
-                            <img src={WeatherGuide} alt="Weather Guide" className="explore-img"/>
-                            <p>Get up-to-date weather forecasts for any location to help plan your trips.<br/><br/></p>
-                            <button className='explore-btn' onClick={handleWeather}>Find Weather</button>
-                        </div>
-                        <div className='explore-column'>
-                            <h3>Globe Exchange</h3>
-                            <img src={GlobeExchange} alt="Globe Exchange" className="explore-img"/>
-                            <p>Instantly convert between different currencies using real-time exchange rates.<br/><br/></p>
-                            <button className='explore-btn' onClick={handleConvertCurrency}>Convert Currency</button>
-                        </div>
-                        <div className='explore-column'>
-                            <h3>Safe Link</h3>
-                            <img src={SafeLink} alt="Safe Link" className="explore-img"/>
-                            <p>Quickly access vital emergency contact information, such as police and other services, to ensure safety during your travels.</p>
-                            <button className='explore-btn' onClick={handleEmergencyConnect}>Emergency Connector</button>
-                        </div>
-                    </div>  
-                    <Footer/>  
-            </div>
-            
-        </>
+    <div>
+      <div className="container mt-5">
+        <div className="jumbotron">
+          <h1 className="display-4">Welcome to Tourmate</h1>
+          <p className="lead">
+            Tourmate is your ultimate travel companion, designed to enhance your
+            travel experience and make your journeys unforgettable. Whether you
+            are planning a solo adventure or a group trip, Tourmate provides you
+            with the tools you need to plan, organize, and enjoy your travels.
+          </p>
+          <hr className="my-4" />
+          <p>
+            With Tourmate, you can easily discover new destinations, create
+            itineraries, find travel buddies, and share your experiences with
+            friends and fellow travelers. Our user-friendly platform ensures
+            that you have all the information and resources you need at your
+            fingertips.
+          </p>
+          <ul>
+            <li>Discover exciting destinations and hidden gems</li>
+            <li>Create and manage your travel itineraries</li>
+            <li>Connect with fellow travelers and find travel buddies</li>
+            <li>Share your travel experiences and memories</li>
+            <li>Get personalized recommendations and travel tips</li>
+          </ul>
+          <div>
+            {
+              <>
+                <button style={btnStyle} onClick={handleFindRoute}>
+                  Find a Route
+                </button>
+                <button style={btnStyle} onClick={handleFindHotel}>
+                  Find a Hotel
+                </button>
+                <button style={btnStyle} onClick={handleFindRestaurant}>
+                  Find Places
+                </button>
+              </>
+            }
+          </div>
+        </div>
+        <video autoPlay loop muted className="video-background">
+          <source src={backgroundVideo} type="video/mp4" />
+          Your browser does not support the video tag.
+        </video>
+      </div>
+    </div>
   );
 }
