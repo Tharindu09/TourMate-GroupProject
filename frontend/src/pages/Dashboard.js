@@ -1,8 +1,7 @@
 import React from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
-import backgroundVideo from "../istockphoto-1362880565-640_adpp_is.mp4";
 import { useNavigate } from "react-router-dom";
-import Navbar from "../components/Navbar";
+import Header from "../components/Header";
 
 export default function Dashboard() {
   const navigate = useNavigate();
@@ -42,7 +41,6 @@ export default function Dashboard() {
   };
   return (
     <div>
-      <Navbar />
       <div className="container mt-5">
         <div className="jumbotron">
           <h1 className="display-4">Welcome to Tourmate</h1>
@@ -92,10 +90,6 @@ export default function Dashboard() {
             }
           </div>
         </div>
-        <video autoPlay loop muted className="video-background">
-          <source src={backgroundVideo} type="video/mp4" />
-          Your browser does not support the video tag.
-        </video>
       </div>
     </div>
   );

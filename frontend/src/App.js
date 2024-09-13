@@ -51,19 +51,27 @@ const App = () => {
                   <Route path="/profile" element={<Profile />} />
                   <Route path="/add-bookmarks" element={<AddBookmarks />} />
                   <Route path="/create-plan" element={<Plan />} />
+                  <Route path="/find-hotel" element={<HotelPage />} />
+                  <Route path="/find-restaurant" element={<SearchPlace />} />
                 </Route>
                 <Route path="/" element={<Home />} />
                 <Route path="/signup" element={<Signup />} />
                 <Route path="/login" element={<Login />} />
                 <Route path="/find-route" element={<RoutePage />} />
-                <Route path="/find-hotel" element={<HotelPage />} />
-                <Route path="/find-restaurant" element={<SearchPlace />} />
+                <Route
+                  path="/currency-converter"
+                  element={<CurrencyConverter />}
+                />
+                <Route
+                  path="/emergency-connector"
+                  element={<EmergencyConnector />}
+                />
+                <Route path="/weather" element={<Weather />} />
                 <Route path="/forgot-password" element={<ForgotPassword />} />
                 <Route path="/navbar" element={<Navbar />} />
               </Routes>
             </div>
           </Container>
-          <Footer />
         </Box>
       </Router>
     </AuthProvider>
