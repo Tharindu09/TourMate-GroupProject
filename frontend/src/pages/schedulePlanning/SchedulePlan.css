@@ -185,3 +185,21 @@ table tr:nth-child(even) td {
 .radio:hover {
   cursor: pointer;
 }
+
+.segment-container {
+  border: 2px solid #007bff; /* Blue border */
+  padding: 15px;             /* Add padding inside the container */
+  margin-bottom: 20px;        /* Add some space between segments */
+  border-radius: 10px;        /* Rounded corners */
+  background-color: #f9f9f9;  /* Light background color */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
+}
+
+.segment-container h4 {
+  margin-bottom: 10px; /* Add some space below the heading */
+}
+
+.segment-container p {
+  margin: 5px 0; /* Add some spacing between paragraphs */
+}
+

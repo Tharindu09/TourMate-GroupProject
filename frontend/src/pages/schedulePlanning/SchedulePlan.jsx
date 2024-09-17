@@ -181,8 +181,10 @@ const SchedulePlan = () => {
   // Handle waiting time input for dynamic stops
   const handleWaitingTimeInput = (index, value) => {
     const newWaitingTimes = [...waitingTimes];
-    newWaitingTimes[index] = value;
+    newWaitingTimes[index] = parseFloat(value); // Make sure it's a number
     setWaitingTimes(newWaitingTimes);
+
+    console.log("Updated Waiting Times:", newWaitingTimes);
   };
 
   // Handle reverse route toggle (start as destination)
@@ -224,7 +226,6 @@ const SchedulePlan = () => {
     const dailyStartTime = getHoursFromTime(dailyStartTimeInput);
     const dailyEndTime = getHoursFromTime(dailyEndTimeInput);
 
-
     const locationPromises = locations.map((loc) =>
       fetch(
         `http://localhost:1200/api/destinations/coordinates?name=${encodeURIComponent(
@@ -259,6 +260,8 @@ const SchedulePlan = () => {
         // Display the towns
         displayTowns(passingTowns, "Passing Towns");
         displayTowns(nearbyTowns, "Nearby Towns");
+
+        console.log("Waiting Times Before Route Calculation:", waitingTimes);
 
         // Calculate the route based on the fetched locations and other parameters
         calculateContinuousRoute(
@@ -427,20 +430,23 @@ const SchedulePlan = () => {
         const arrivalTime = new Date(currentDateTime);
 
         // Get nearby towns during meal times
-      const nearbyTownsDuringMeal = getNearbyTownsForMealTime(
-        [from, to],
-        departureTime
-      );
-
-      if (nearbyTownsDuringMeal.meal !== "none") {
-        console.log(
-          `Nearby towns for ${nearbyTownsDuringMeal.meal}:`,
-          nearbyTownsDuringMeal.nearbyTowns
+        const nearbyTownsDuringMeal = getNearbyTownsForMealTime(
+          [from, to],
+          departureTime
         );
 
-        // Display the towns or handle them according to your needs (e.g., show on map)
-        displayTowns(nearbyTownsDuringMeal.nearbyTowns, `Nearby ${nearbyTownsDuringMeal.meal} Towns`);
-      }
+        if (nearbyTownsDuringMeal.meal !== "none") {
+          console.log(
+            `Nearby towns for ${nearbyTownsDuringMeal.meal}:`,
+            nearbyTownsDuringMeal.nearbyTowns
+          );
+
+          // Display the towns or handle them according to your needs (e.g., show on map)
+          displayTowns(
+            nearbyTownsDuringMeal.nearbyTowns,
+            `Nearby ${nearbyTownsDuringMeal.meal} Towns`
+          );
+        }
 
         // Format the times to be displayed in the table
         const formattedDepartureTime = departureTime.toLocaleString("en-GB", {
@@ -460,16 +466,24 @@ const SchedulePlan = () => {
         });
 
         // Add segment details
-        setSegmentDetails((prevDetails) => [
-          ...prevDetails,
-          {
-            from: from.name,
-            to: to.name,
-            distance: segmentDistance.toFixed(2),
-            time: (segmentTravelTime / 60).toFixed(2),
-            waitingTime,
-          },
-        ]);
+setSegmentDetails((prevDetails) => {
+  const totalHours = Math.floor(segmentTravelTime / 3600); // Get the full hours
+  const totalMinutes = Math.floor((segmentTravelTime % 3600) / 60); // Get the remaining minutes
+
+  return [
+    ...prevDetails,
+    {
+      from: from.name,
+      to: to.name,
+      distance: segmentDistance.toFixed(2), // Keep distance as is, with 2 decimal places
+      time: `${totalHours}h ${totalMinutes}`, // Format time as "Xh Ymin"
+      waitingTime,
+    },
+  ];
+});
+
+
+
 
         // Add arrival table data
         setArrivalTable((prevTable) => [
@@ -629,18 +643,40 @@ const SchedulePlan = () => {
     return orderedStopsWithTimes;
   };
 
+  // Function to dynamically calculate the multiplier based on straight-line distance
+  const getRoadDistanceMultiplier = (distance) => {
+    if (distance <= 50) {
+      return 1.3; // For short distances, a lower multiplier
+    } else if (distance > 50 && distance <= 120) {
+      return 1.4; // For medium distances, moderate multiplier
+    } else {
+      return 1.65; // For long distances, a higher multiplier
+    }
+  };
+
+  // Haversine formula to calculate straight-line distance
   const distanceBetweenCoords = (coord1, coord2) => {
     const R = 6371; // Radius of the Earth in kilometers
     const dLat = ((coord2.lat - coord1.lat) * Math.PI) / 180;
     const dLng = ((coord2.lon - coord1.lon) * Math.PI) / 180;
+
     const a =
       Math.sin(dLat / 2) * Math.sin(dLat / 2) +
       Math.cos((coord1.lat * Math.PI) / 180) *
         Math.cos((coord2.lat * Math.PI) / 180) *
         Math.sin(dLng / 2) *
         Math.sin(dLng / 2);
+
     const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-    return R * c;
+
+    const straightLineDistance = R * c; // Straight-line distance in kilometers
+
+    // Get the appropriate road distance multiplier based on the straight-line distance
+    const roadDistanceMultiplier =
+      getRoadDistanceMultiplier(straightLineDistance);
+
+    // Return the adjusted road distance
+    return straightLineDistance * roadDistanceMultiplier;
   };
 
   const getTownsAlongRoute = (waypoints) => {
@@ -725,6 +761,14 @@ const SchedulePlan = () => {
 
     return { meal: "none", nearbyTowns: [] }; // No meal time
   };
+
+  // Formatting time in 'hh:mm AM/PM' format
+const formatTime = (timeIn24h) => {
+  const [hours, minutes] = timeIn24h.split(":").map(Number);
+  const period = hours >= 12 ? "PM" : "AM";
+  const formattedHours = hours % 12 || 12; // Convert to 12-hour format
+  return `${formattedHours}:${minutes.toString().padStart(2, "0")} ${period}`;
+};
 
   return (
     <div>
@@ -911,6 +955,10 @@ const SchedulePlan = () => {
                     name={`waitingTime${index + 1}`}
                     value="15"
                     className="radio"
+                    onChange={(e) =>
+                      handleWaitingTimeInput(index, e.target.value)
+                    } // Add onChange handler
+                    checked={waitingTimes[index] === 15} // Add checked condition
                   />{" "}
                   15 min
                   <input
@@ -918,6 +966,10 @@ const SchedulePlan = () => {
                     name={`waitingTime${index + 1}`}
                     value="30"
                     className="radio"
+                    onChange={(e) =>
+                      handleWaitingTimeInput(index, e.target.value)
+                    } // Add onChange handler
+                    checked={waitingTimes[index] === 30} // Add checked condition
                   />{" "}
                   30 min
                   <input
@@ -925,6 +977,10 @@ const SchedulePlan = () => {
                     name={`waitingTime${index + 1}`}
                     value="60"
                     className="radio"
+                    onChange={(e) =>
+                      handleWaitingTimeInput(index, e.target.value)
+                    } // Add onChange handler
+                    checked={waitingTimes[index] === 60} // Add checked condition
                   />{" "}
                   1 hour
                   <input
@@ -932,11 +988,16 @@ const SchedulePlan = () => {
                     name={`waitingTime${index + 1}`}
                     value="120"
                     className="radio"
+                    onChange={(e) =>
+                      handleWaitingTimeInput(index, e.target.value)
+                    } // Add onChange handler
+                    checked={waitingTimes[index] === 120} // Add checked condition
                   />{" "}
-                  2 hour
+                  2 hours
                 </div>
               </div>
             ))}
+
             <button
               id="findRoute"
               onClick={findRoute}
@@ -1003,7 +1064,7 @@ const SchedulePlan = () => {
               </div>
               <div>
                 {segmentDetails.map((segment, index) => (
-                  <div key={index}>
+                  <div key={index} className="segment-container">
                     <h4>
                       From {segment.from} to {segment.to}
                     </h4>
@@ -1048,14 +1109,23 @@ const SchedulePlan = () => {
             </div>
 
             <div id="summaryDiv">
-              <h3>Overall Summary</h3>
-              <p>
-                <strong>Total Distance:</strong> {summary.totalDistance} km
-              </p>
-              <p>
-                <strong>Total Time:</strong> {summary.totalTime} minutes
-              </p>
-            </div>
+  <h3>Overall Summary</h3>
+  {/* <p>
+    <strong>Total Distance:</strong> {summary.totalDistance} km
+  </p>
+  <p>
+    <strong>Total Time:</strong> {summary.totalTime} minutes
+  </p> */}
+
+  <h3>Travel Assumptions</h3>
+  <p>
+    <strong>Allowed Travel Hours:</strong>{" "}
+    {`${formatTime(dailyStartTime)} to ${formatTime(dailyEndTime)}`}
+  </p>
+  <p>
+    <strong>If travel time exceeds the allowed time, the remaining journey will resume at {formatTime(dailyStartTime)} the next day.</strong>
+  </p>
+</div>
             <Button onClick={() => setCount(0)} variant="outlined">
               <ArrowBackIos />
               Back
