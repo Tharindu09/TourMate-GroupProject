@@ -34,6 +34,9 @@ const SchedulePlan = () => {
   const [count, setCount] = useState(0); //Count to select which part to render
   const navigate = useNavigate();
 
+  const [dailyStartTime, setDailyStartTime] = useState("07:00");
+  const [dailyEndTime, setDailyEndTime] = useState("20:00");
+
   const handleManageBookmarksClick = () => {
     navigate("/add-bookmarks");
   };
@@ -202,10 +205,25 @@ const SchedulePlan = () => {
     }
   };
 
+  // Function to extract time in hours from the user's input
+  const getHoursFromTime = (timeStr) => {
+    const [hours, minutes] = timeStr.split(":").map(Number);
+    return hours + minutes / 60;
+  };
+
   const findRoute = () => {
     const stopsToFetch = stops.filter((stop) => stop.trim() !== "");
     const locations = [start, ...stopsToFetch, destination];
     setCount(count + 1); //Count to render which part
+
+    // Get the daily start and end times from the user input
+    const dailyStartTimeInput = document.getElementById("dailyStartTime").value;
+    const dailyEndTimeInput = document.getElementById("dailyEndTime").value;
+
+    // Convert the times to hours
+    const dailyStartTime = getHoursFromTime(dailyStartTimeInput);
+    const dailyEndTime = getHoursFromTime(dailyEndTimeInput);
+
 
     const locationPromises = locations.map((loc) =>
       fetch(
@@ -246,7 +264,9 @@ const SchedulePlan = () => {
         calculateContinuousRoute(
           finalWaypoints,
           waitingTimes,
-          new Date(startDateTime)
+          new Date(startDateTime),
+          dailyStartTime,
+          dailyEndTime
         );
       })
       .catch((error) => console.error("Error fetching geocoding data:", error));
@@ -255,7 +275,9 @@ const SchedulePlan = () => {
   const calculateContinuousRoute = (
     waypoints,
     waitingTimes,
-    startDateTimeValue
+    startDateTimeValue,
+    dailyStartTime,
+    dailyEndTime
   ) => {
     // Remove any previous routing controls from the map
     if (routingControlRef.current) {
@@ -314,7 +336,9 @@ const SchedulePlan = () => {
           finalWaitingTimes,
           totalTravelTime,
           totalDistance,
-          startDateTimeValue
+          startDateTimeValue,
+          dailyStartTime,
+          dailyEndTime
         );
       })
       .on("routingerror", (error) => {
@@ -344,13 +368,11 @@ const SchedulePlan = () => {
     finalWaitingTimes,
     totalTravelTime,
     totalDistance,
-    startDateTimeValue
+    startDateTimeValue,
+    dailyStartTime,
+    dailyEndTime
   ) => {
     let currentDateTime = new Date(startDateTimeValue);
-    let currentDayTime =
-      currentDateTime.getHours() + currentDateTime.getMinutes() / 60;
-    const dailyStartTime = 7;
-    const dailyEndTime = 20;
 
     setSegmentDetails([]); // Clear previous details
     setArrivalTable([]); // Clear previous table entries
@@ -358,7 +380,7 @@ const SchedulePlan = () => {
 
     const overallSummary = {
       totalDistance: totalDistance.toFixed(2),
-      totalTime: (totalTravelTime / 60).toFixed(2), // Convert time to minutes
+      totalTime: (totalTravelTime / 60).toFixed(2), // Convert time to hours
     };
     setSummary(overallSummary); // Set the summary
 
@@ -374,28 +396,53 @@ const SchedulePlan = () => {
         const segmentTravelTime =
           (totalTravelTime / totalDistance) * segmentDistance;
 
-        const departureTime = new Date(currentDateTime);
+        let departureTime = new Date(currentDateTime);
 
+        // Calculate end time for the current segment
         accumulatedTime += segmentTravelTime;
+
         if (waitingTime > 0) {
-          accumulatedTime += waitingTime * 60; // Convert minutes to seconds
+          accumulatedTime += waitingTime * 60; // Convert waiting time to seconds
         }
 
-        let segmentEndHour = currentDayTime + segmentTravelTime / 3600;
+        // Check if the segment ends past 8:00 PM
+        let segmentEndHour =
+          currentDateTime.getHours() + segmentTravelTime / 3600;
 
         if (segmentEndHour > dailyEndTime) {
           currentDateTime.setDate(currentDateTime.getDate() + 1); // Move to the next day
-          currentDateTime.setHours(dailyStartTime, 0, 0); // Set to start time (7:00 AM)
-          currentDayTime = dailyStartTime;
-          segmentEndHour = dailyStartTime + segmentTravelTime / 3600; // Recalculate
+          currentDateTime.setHours(dailyStartTime, 0, 0);
+          departureTime = new Date(currentDateTime); // Set departure for next segment
+          // Now add the travel time again after setting the start time for the next day
+          currentDateTime.setSeconds(
+            currentDateTime.getSeconds() + segmentTravelTime + waitingTime * 60
+          );
+        } else {
+          // Add the travel time to the current time if within the same day
+          currentDateTime.setSeconds(
+            currentDateTime.getSeconds() + segmentTravelTime + waitingTime * 60
+          );
         }
 
-        currentDayTime += segmentTravelTime / 3600;
-        currentDateTime.setSeconds(
-          currentDateTime.getSeconds() + segmentTravelTime + waitingTime * 60
-        );
         const arrivalTime = new Date(currentDateTime);
 
+        // Get nearby towns during meal times
+      const nearbyTownsDuringMeal = getNearbyTownsForMealTime(
+        [from, to],
+        departureTime
+      );
+
+      if (nearbyTownsDuringMeal.meal !== "none") {
+        console.log(
+          `Nearby towns for ${nearbyTownsDuringMeal.meal}:`,
+          nearbyTownsDuringMeal.nearbyTowns
+        );
+
+        // Display the towns or handle them according to your needs (e.g., show on map)
+        displayTowns(nearbyTownsDuringMeal.nearbyTowns, `Nearby ${nearbyTownsDuringMeal.meal} Towns`);
+      }
+
+        // Format the times to be displayed in the table
         const formattedDepartureTime = departureTime.toLocaleString("en-GB", {
           day: "2-digit",
           month: "long",
@@ -631,6 +678,54 @@ const SchedulePlan = () => {
     }
   };
 
+  // Define time ranges for meals in hours (24-hour format)
+  const mealTimes = {
+    breakfast: { start: 7, end: 10 }, // 7:00 AM to 10:00 AM
+    lunch: { start: 12, end: 14 }, // 12:00 PM to 2:00 PM
+    dinner: { start: 19, end: 22 }, // 7:00 PM to 10:00 PM
+  };
+
+  // Function to determine if the current time falls within a meal time range
+  const isWithinMealTime = (currentHour, mealTimeRange) => {
+    return (
+      currentHour >= mealTimeRange.start && currentHour < mealTimeRange.end
+    );
+  };
+
+  // Updated function to fetch nearby towns for specific meal times
+  const getNearbyTownsForMealTime = (waypoints, currentDateTime) => {
+    const nearbyTowns = [];
+
+    // Check current time in hours
+    const currentHour = currentDateTime.getHours();
+
+    // Get nearby towns
+    const nearbyTownsForWaypoints = getNearbyTowns(waypoints);
+
+    // Check if the current time falls within any meal time range
+    if (isWithinMealTime(currentHour, mealTimes.breakfast)) {
+      console.log("It's breakfast time!");
+      return {
+        meal: "breakfast",
+        nearbyTowns: nearbyTownsForWaypoints, // Towns nearby during breakfast
+      };
+    } else if (isWithinMealTime(currentHour, mealTimes.lunch)) {
+      console.log("It's lunch time!");
+      return {
+        meal: "lunch",
+        nearbyTowns: nearbyTownsForWaypoints, // Towns nearby during lunch
+      };
+    } else if (isWithinMealTime(currentHour, mealTimes.dinner)) {
+      console.log("It's dinner time!");
+      return {
+        meal: "dinner",
+        nearbyTowns: nearbyTownsForWaypoints, // Towns nearby during dinner
+      };
+    }
+
+    return { meal: "none", nearbyTowns: [] }; // No meal time
+  };
+
   return (
     <div>
       <h1 className="Schedule-Header">Schedule Planner</h1>
@@ -696,6 +791,35 @@ const SchedulePlan = () => {
                 />{" "}
                 Use Destination as Start Location
               </label>
+            </div>
+            {/* New inputs for daily start and end time */}
+            <div className="time-input-container">
+              <div>
+                <label htmlFor="dailyStartTime" className="label">
+                  Daily Start Time:
+                </label>
+                <input
+                  type="time"
+                  id="dailyStartTime"
+                  value={dailyStartTime}
+                  onChange={(e) => setDailyStartTime(e.target.value)}
+                  className="time-input"
+                  required
+                />
+              </div>
+              <div>
+                <label htmlFor="dailyEndTime" className="label">
+                  Daily End Time:
+                </label>
+                <input
+                  type="time"
+                  id="dailyEndTime"
+                  value={dailyEndTime}
+                  onChange={(e) => setDailyEndTime(e.target.value)}
+                  className="time-input"
+                  required
+                />
+              </div>
             </div>
             <Box sx={{ display: "flex", justifyContent: "space-between" }}>
               <Typography variant="h5">Your Bookmarks:</Typography>
