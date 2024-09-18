@@ -10,7 +10,7 @@ import Dashboard from "./pages/dashboard/Dashboard";
 import CurrencyConverter from "./pages/CurrencyConverter";
 import EmergencyConnector from "./pages/EmergencyConnector";
 import Weather from "./pages/Weather";
-import HotelPage from "./pages/HotelPage";
+import HotelPage from "./pages/Hotel/HotelPage";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import { AuthProvider } from "./utils/AuthContext";
 import ProtectedRoutes from "./utils/ProtectedRoutes";
@@ -44,7 +44,7 @@ const App = () => {
             <div>
               <Routes>
                 <Route element={<ProtectedRoutes />}>
-                  {/* Add other protected routes here if needed */}
+                  {/* Add other protected routes here if needed */}=
                   <Route path="/dashboard" element={<Dashboard />} />
                   <Route path="/profile" element={<Profile />} />
                   <Route path="/add-bookmarks" element={<AddBookmarks />} />
@@ -52,8 +52,8 @@ const App = () => {
                    <Route path="/find-hotel" element={<HotelPage />} />
                    <Route path="/find-places" element={<SearchPlace />} /> 
                    <Route path="/find-restaurants" element={<RestaurantPage />} />
+                    <Route path="/schedule-plan" element={<PlanPage />} />
                 </Route>
-          
                 <Route path="/" element={<Home />} />
                 <Route path="/signup" element={<Signup />} />
                 <Route path="/login" element={<Login />} />

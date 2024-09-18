@@ -14,13 +14,14 @@ import {
   FormControlLabel,
 } from "@mui/material";
 import React, { useState, useEffect } from "react";
-import PlaceSuggest from "../components/PlaceSuggest/PlaceSuggest";
-import { getHotelData } from "../api";
-import HotelCard from "../components/SearchHeader/HotelCard/HotelCard";
+import PlaceSuggest from "../../components/PlaceSuggest/PlaceSuggest";
+import { getHotelData } from "../../api";
+import HotelCard from "../../components/SearchHeader/HotelCard/HotelCard";
 import { useCallback } from "react";
 import { debounce } from "lodash";
-import { fetchExchangeRate } from "../api";
+import { fetchExchangeRate } from "../../api";
 import { KeyboardArrowDown } from "@mui/icons-material";
+import "./Hotel.css";
 
 export default function HotelPage() {
   const today = new Date().toISOString().split("T")[0];
@@ -186,6 +187,7 @@ export default function HotelPage() {
         display="flex"
         alignItems="center"
         justifyContent="space-around"
+        className="simple-header"
         sx={{
           height: "50px",
           position: "sticky",
@@ -194,7 +196,7 @@ export default function HotelPage() {
           width: "100%",
           zIndex: 1000,
           backgroundColor: "#fff",
-        }} // Ensure it stays on top of other content }}
+        }}
       >
         <PlaceSuggest setCoordinates={setCoordinates}></PlaceSuggest>
         <div>

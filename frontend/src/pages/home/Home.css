@@ -10,12 +10,12 @@
   height: calc(100vh - 100px);
   left: 0px;
   top: 100px;
-  background: #90C3FF;
+  background: #90c3ff;
 }
 
-.title{
+.title {
   margin-top: 48px;
-  font-family: 'Josefin Sans';
+  font-family: "Josefin Sans";
   font-style: normal;
   font-weight: 700;
   font-size: 104px;
@@ -26,9 +26,9 @@
   order: 0;
   flex-grow: 0;
 }
-.title-paragraph{
+.title-paragraph {
   margin-top: 40px;
-  font-family: 'Roboto';
+  font-family: "Roboto";
   font-style: normal;
   font-weight: 400;
   font-size: 16px;
@@ -42,7 +42,7 @@
   flex-grow: 0;
 }
 
-.icon{
+.icon {
   height: 100px;
   width: 200px;
   margin-left: 100px;
@@ -64,7 +64,7 @@
 
 .home-container-columns h3 {
   margin: 20px 0 0;
-  font-family: 'Josefin Sans';
+  font-family: "Josefin Sans";
   font-style: normal;
   font-weight: 700;
   font-size: 24px;
@@ -75,15 +75,15 @@
 /* Adjust layout for smaller screens */
 @media (max-width: 768px) {
   .home-container-columns {
-      flex-direction: column; /* Stack columns vertically on small screens */
+    flex-direction: column; /* Stack columns vertically on small screens */
   }
   .home-column {
-      flex-basis: 100%; /* Full width for each column on small screens */
+    flex-basis: 100%; /* Full width for each column on small screens */
   }
 }
 
-.login-button{
-  font-family: 'Josefin Sans';
+.login-button {
+  font-family: "Josefin Sans";
   font-style: normal;
   font-weight: 700;
   font-size: 18px;
@@ -91,7 +91,7 @@
   justify-content: center;
   align-items: center;
   padding: 10px 40px;
-  background: #90C3FF;
+  background: #90c3ff;
   width: 148px;
   height: 38px;
   margin-left: 20px;
@@ -100,7 +100,7 @@
   cursor: pointer;
   transition: transform 0.3s ease;
 }
-.login-button:hover{
+.login-button:hover {
   transform: scale(1.05);
 }
 .login-paragraph {
@@ -110,10 +110,10 @@
   align-items: center; /* Center the container vertically within its parent */
 }
 
-.login-paragraph p{
+.login-paragraph p {
   width: 489px;
   height: 18px;
-  font-family: 'Josefin Sans';
+  font-family: "Josefin Sans";
   font-style: normal;
   font-weight: 700;
   font-size: 18px;
@@ -130,7 +130,7 @@
   top: 100vh;
   background: #ffffff;
 }
-.explore-container-columns{
+.explore-container-columns {
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -138,15 +138,15 @@
   flex-wrap: nowrap; /* Prevent wrapping */
 }
 
-.explore-img{
+.explore-img {
   width: 280px;
   height: 238px;
 }
 
-.explore-column h3{
+.explore-column h3 {
   width: 280px;
   height: 90px;
-  font-family: 'Josefin Sans';
+  font-family: "Josefin Sans";
   font-style: normal;
   font-weight: 700;
   font-size: 24px;
@@ -155,10 +155,10 @@
   padding-top: 24px;
 }
 
-.explore-column p{
+.explore-column p {
   width: 280px;
   height: auto;
-  font-family: 'Roboto';
+  font-family: "Roboto";
   font-style: normal;
   font-weight: 400;
   font-size: 18px;
@@ -168,12 +168,12 @@
   margin-top: 24px;
 }
 
-.explore-btn{
-  font-family: 'Josefin Sans';
+.explore-btn {
+  font-family: "Josefin Sans";
   font-style: normal;
   font-weight: 700;
   font-size: 18px;
-  color: #FFFFFF;
+  color: #ffffff;
   display: flex;
   flex-direction: row;
   justify-content: center;
@@ -182,14 +182,14 @@
   width: auto;
   height: 38px;
   border: none;
-  background: #FF6F61;
+  background: #ff6f61;
   border-radius: 100px;
   margin: 24px 0 0 64px;
-  padding: 0 16px ;
+  padding: 0 16px;
   cursor: pointer;
   transition: transform 0.3s ease;
 }
-.explore-btn:hover{
-  background-color: #FF3B2F;
+.explore-btn:hover {
+  background-color: #ff3b2f;
   transform: scale(1.05);
 }
