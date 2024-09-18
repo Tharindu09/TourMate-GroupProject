@@ -40,15 +40,15 @@ export default function Home() {
                     <div className="home-container-columns">
                         <div className="home-column">
                             <FontAwesomeIcon icon={faMapMarkedAlt} size="3x" />
-                            <h3>Personalized Tour Planing</h3>
+                            <h3 style={{ color: 'black' }}>Personalized Tour Planing</h3>
                         </div>
                         <div className="home-column">
                             <FontAwesomeIcon icon={faUtensils} size="3x" />
-                            <h3>Find Restaurants</h3>
+                            <h3 style={{ color: 'black' }}>Find Restaurants</h3>
                         </div>
                         <div className="home-column">
                             <FontAwesomeIcon icon={faHotel} size="3x" />
-                            <h3>Find Hotels</h3>
+                            <h3 style={{ color: 'black' }}>Find Hotels</h3>
                         </div>
                     </div>
                     <div className='login-paragraph'>
