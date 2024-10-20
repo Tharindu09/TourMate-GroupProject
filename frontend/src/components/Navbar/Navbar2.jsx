@@ -1,5 +1,5 @@
 /*Navbar for after login pages*/
-import React, { useEffect } from "react";
+import React from "react";
 import "./Navbar.css";
 import logob from "../../assets/logob.png";
 import { Link } from "react-router-dom";
@@ -48,6 +48,7 @@ const Navbar2 = () => {
         <Link to="/find-places">Restaurants</Link>
         <Link to="/find-places">Places</Link>
         <Link to="/schedule-plan">Schedule</Link>
+        <Link to="/profile">Profile</Link>
       </nav>
       <Link to="/" className="link-button">
         <button onClick={handleLogout} className="logout-btn">

@@ -15,7 +15,7 @@ import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import { AuthProvider } from "./utils/AuthContext";
 import ProtectedRoutes from "./utils/ProtectedRoutes";
 import { Box, Container } from "@mui/material";
-import Profile from "./pages/Profile";
+import Profile from "./pages/ProfilePage/Profile.jsx";
 import ForgotPassword from "./pages/ForgotPassword";
 import SchedulePlan from "./pages/schedulePlanning/SchedulePlan";
 import { useAuth } from "./utils/AuthContext";

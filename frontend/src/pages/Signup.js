@@ -6,6 +6,7 @@ import {
   Card,
   FormHelperText,
   Grid,
+  InputAdornment,
   Paper,
   TextField,
   Typography,
@@ -28,6 +29,9 @@ const textstyle = {
   marginBottom: 2, // adds some spacing below the text
 };
 export default function Signup() {
+
+
+
   const navigate = useNavigate();
 
   const initialFormData = {
@@ -235,6 +239,7 @@ export default function Signup() {
                           height: "40px",
                         },
                         endAdornment: (
+                          <InputAdornment position="end">
                           <IconButton
                             aria-label="toggle password visibility"
                             onClick={togglePasswordVisibility}
@@ -246,6 +251,7 @@ export default function Signup() {
                               <VisibilityIcon />
                             )}
                           </IconButton>
+                        </InputAdornment>
                         ),
                       }}
                     />
@@ -304,6 +310,8 @@ export default function Signup() {
                       />
                     </div>
                   )}
+
+
                   <Button
                     type="submit"
                     color="primary"

@@ -9,6 +9,7 @@ import {
   TextField,
   Link,
   Typography,
+  InputAdornment,
 } from "@mui/material";
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import Checkbox from "@mui/material/Checkbox";
@@ -127,6 +128,7 @@ export default function Logtest() {
               onChange={(e) => setPassword(e.target.value)}
               InputProps={{
                 endAdornment: (
+                  <InputAdornment position="end">
                   <IconButton
                     aria-label="toggle password visibility"
                     onClick={togglePasswordVisibility}
@@ -134,6 +136,7 @@ export default function Logtest() {
                   >
                     {showPassword ? <VisibilityOffIcon /> : <VisibilityIcon />}
                   </IconButton>
+                  </InputAdornment>
                 ),
               }}
             />
