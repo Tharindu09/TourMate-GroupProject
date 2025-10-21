@@ -10,7 +10,7 @@ export const getPlaceData = async (sw, ne, type) => {
       // open_now: "false",
     },
     headers: {
-      "x-rapidapi-key": fd70840741msh268f628885d351dp1d88a0jsnf680071f034e,
+      "x-rapidapi-key": "fd70840741msh268f628885d351dp1d88a0jsnf680071f034e",
       "x-rapidapi-host": "travel-advisor.p.rapidapi.com",
     },
   };
@@ -50,7 +50,7 @@ export const getHotelData = async (
       units: "metric",
     },
     headers: {
-      "x-rapidapi-key": fd70840741msh268f628885d351dp1d88a0jsnf680071f034e,
+      "x-rapidapi-key": "fd70840741msh268f628885d351dp1d88a0jsnf680071f034e",
       "x-rapidapi-host": "booking-com18.p.rapidapi.com",
     },
   };
