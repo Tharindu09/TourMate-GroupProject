@@ -10,7 +10,7 @@ export const getPlaceData = async (sw, ne, type) => {
       // open_now: "false",
     },
     headers: {
-      "x-rapidapi-key": "fd70840741msh268f628885d351dp1d88a0jsnf680071f034e",
+      "x-rapidapi-key": process.env.REACT_APP_RAPIDAPI_KEY,
       "x-rapidapi-host": "travel-advisor.p.rapidapi.com",
     },
   };
@@ -50,7 +50,7 @@ export const getHotelData = async (
       units: "metric",
     },
     headers: {
-      "x-rapidapi-key": "fd70840741msh268f628885d351dp1d88a0jsnf680071f034e",
+      "x-rapidapi-key": process.env.REACT_APP_RAPIDAPI_KEY,
       "x-rapidapi-host": "booking-com18.p.rapidapi.com",
     },
   };
@@ -76,7 +76,7 @@ export const getHotelData = async (
 export const fetchExchangeRate = async () => {
   try {
     const response = await axios.get(
-      "https://v6.exchangerate-api.com/v6/6018d6bca6c0633fc54f6a62/pair/USD/LKR"
+      `https://v6.exchangerate-api.com/v6/${process.env.REACT_APP_EXCHANGERATE_API_KEY}/pair/USD/LKR`
     );
 
     const rate = response.data.conversion_rate;
@@ -93,7 +93,7 @@ export const getPlaceSuggestions = async (query) => {
       radius: "500",
     },
     headers: {
-      "x-rapidapi-key": "8ecbf3f5d9mshdae784e4c5b86a1p1e8241jsneaae86936521",
+      "x-rapidapi-key": process.env.REACT_APP_RAPIDAPI_PLACES_KEY,
       "x-rapidapi-host": "place-autocomplete1.p.rapidapi.com",
     },
   };

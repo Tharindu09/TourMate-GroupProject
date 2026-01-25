@@ -13,7 +13,7 @@ const CurrencyConverter = () => {
   const [error, setError] = useState(null);
 
   useEffect(() => {
-    const apiKey = "2b39ccc55f90698064f779ed"; // Replace with your ExchangeRate-API key
+    const apiKey = process.env.REACT_APP_CURRENCY_CONVERTER_API_KEY;
     const url = `https://v6.exchangerate-api.com/v6/${apiKey}/latest/USD`;
 
     
@@ -45,7 +45,7 @@ const CurrencyConverter = () => {
 
   const convertCurrency = async () => {
     try {
-      const apiKey = "2b39ccc55f90698064f779ed"; // Replace with your ExchangeRate-API key
+      const apiKey = process.env.REACT_APP_CURRENCY_CONVERTER_API_KEY;
       const url = `https://v6.exchangerate-api.com/v6/${apiKey}/pair/${fromCurrency}/${toCurrency}/${amount}`;
       setLoading(true);
       const response = await fetch(url);

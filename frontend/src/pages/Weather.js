@@ -8,7 +8,7 @@ const Weather = () => {
   const [weather, setWeather] = useState(null);
   const [error, setError] = useState("");
 
-  const apiKey = "e377fd55facb2377d09d8783ca1c1d59";
+  const apiKey = process.env.REACT_APP_OPENWEATHER_API_KEY;
 
   const getWeather = async (location) => {
     try {
