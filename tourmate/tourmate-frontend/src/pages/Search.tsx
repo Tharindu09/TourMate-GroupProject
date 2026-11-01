@@ -1,15 +1,22 @@
+import {useState} from 'react';
+import {TravelSearchPage} from '../features/rapidapi/TravelSearchPage';
+import {GeoSearch} from '../features/geoapify/GeoSearch';
 import {Link, useSearchParams} from 'react-router-dom';
 import {useQuery} from '@tanstack/react-query';
-import {api} from '../api/client';
-import type {Destination, Page, Place} from '../types';
+import {getDestinations, getPlaces} from '../services/catalogueService';
+import type {Destination, Page, Place} from '../models';
 import {Loading, Failure} from '../components/Status';
 import {PlaceCard} from '../components/PlaceCard';
 export function Search() {
+ const [mode, setMode] = useState<'rapidapi' | 'geoapify' | 'local'>('rapidapi');
+ return <><div className="search-source" role="group" aria-label="Place data source"><button aria-pressed={mode === 'rapidapi'} onClick={() => setMode('rapidapi')}>Travel Advisor / Booking</button><button aria-pressed={mode === 'geoapify'} onClick={() => setMode('geoapify')}>Geoapify places</button><button aria-pressed={mode === 'local'} onClick={() => setMode('local')}>TourMate sample places</button></div>{mode === 'rapidapi' ? <TravelSearchPage/> : mode === 'geoapify' ? <GeoSearch/> : <LocalSearch/>}</>;
+}
+function LocalSearch() {
  const [params, setParams] = useSearchParams();
  const q = params.get('q') ?? ''; const page = Number(params.get('page') ?? '0');
  const query = new URLSearchParams(params); query.set('size', '12');
- const places = useQuery({queryKey: ['places', query.toString()], queryFn: () => api<Page<Place>>(`/places?${query}`)});
- const destinations = useQuery({queryKey: ['allDestinations'], queryFn: () => api<Page<Destination>>('/destinations?size=100')});
+ const places = useQuery({queryKey: ['places', query.toString()], queryFn: () => getPlaces(query.toString())});
+ const destinations = useQuery({queryKey: ['allDestinations'], queryFn: () => getDestinations('size=100')});
  const matches = destinations.data?.content.filter(d => `${d.name} ${d.city} ${d.country}`.toLowerCase().includes(q.toLowerCase().trim())) ?? [];
  function change(key: string, value: string) {const next = new URLSearchParams(params); if (value) next.set(key, value); else next.delete(key); next.delete('page'); setParams(next, {replace: true});}
  return <section className="page"><p className="eyebrow">FIND YOUR KIND OF PLACE</p><h1>Explore Sri Lanka</h1>

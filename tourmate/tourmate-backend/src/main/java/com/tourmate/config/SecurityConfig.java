@@ -1,4 +1,5 @@
 package com.tourmate.config;
+
 import java.nio.charset.StandardCharsets;
 import java.util.List;
 import jakarta.servlet.DispatcherType;
@@ -37,7 +38,7 @@ public class SecurityConfig {
             .authorizeHttpRequests(auth -> auth
                 .dispatcherTypeMatchers(DispatcherType.ERROR).permitAll()
                 .requestMatchers(HttpMethod.POST, "/api/auth/register", "/api/auth/login").permitAll()
-                .requestMatchers(HttpMethod.GET, "/api/destinations", "/api/destinations/**", "/api/places", "/api/places/**").permitAll()
+                .requestMatchers(HttpMethod.GET, "/api/rapidapi/**", "/api/geoapify/**", "/api/destinations", "/api/destinations/**", "/api/places", "/api/places/**").permitAll()
                 .requestMatchers("/v3/api-docs/**", "/swagger-ui/**", "/swagger-ui.html").permitAll()
                 .anyRequest().authenticated())
             .oauth2ResourceServer(oauth -> oauth.jwt(Customizer.withDefaults())).build();

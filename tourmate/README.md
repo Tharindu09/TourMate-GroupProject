@@ -1,5 +1,7 @@
 # TourMate rebuild
 
+
+See [ARCHITECTURE.md](ARCHITECTURE.md) for the layered backend, frontend responsibilities and verification commands. The [manual scheduler](MANUAL_SCHEDULER.md) is available under **My trips → Plan a trip** (`/trips/plan`), with a four-step flow for user-selected visits, meals and preferences, map-based travel times and route-based restaurant/hotel options, automatic suggestions for added meals and optional travel-reducing visit reordering.
 A separate implementation of the attached plan. The existing root `frontend/` and `backend/` are untouched.
 
 ## Implemented first increment
@@ -9,7 +11,7 @@ A separate implementation of the attached plan. The existing root `frontend/` an
 - Public paginated destination search and place discovery; destination, category, minimum rating, maximum estimated cost and name filters combine.
 - Base place schema plus hotel, restaurant, attraction, photo, amenity and opening-hours tables.
 - Seven destinations and ten example places. Example prices are in LKR; no invented review ratings.
-- React / TypeScript / Vite / Tailwind / TanStack Query: home, search, destination, place, register, login, profile and 404 pages. Responsive CSS landscape illustrations are placeholders for destination photography.
+- React / TypeScript / Vite / Tailwind / TanStack Query: home, search, destination, place, register, login, profile and 404 pages. Locally bundled Wikimedia photographs appear on destination cards, place cards and detail pages, with author/license credits at `/photo-credits`.
 - Swagger UI, Docker development setup and integration test sources.
 
 ## Run with Docker
@@ -90,6 +92,44 @@ See [ROADMAP.md](ROADMAP.md) for the remaining implementation sequence and [PLAN
 
 ## Verification in this workspace
 
-TypeScript syntax transpilation passed for all 14 TypeScript/TSX files using the editor's embedded compiler. JSON, Maven XML and whitespace checks passed. These are static checks only. Full TypeScript type checking, the Vite production build, Vitest and Maven/Testcontainers tests were not run: standalone Node/npm, Maven and Docker are unavailable, and temporary dependency downloads could not connect. A bundled editor JDK was found, but that does not supply Maven or MySQL. No lockfile was generated because package installation could not run.
+The latest Geoapify increment is verified with backend packaging, twenty focused backend tests against a local fake HTTP server, the frontend production build and nine frontend tests. JSON/XML and whitespace checks have passed. All twelve curated photographs remain bundled with their attribution records. The full MySQL/Testcontainers database suite was not run in this increment. A live Geoapify metadata check completed without displaying the key; that record had no media references.
 
 Version references: [Spring Boot 3.5 Java/build requirements](https://docs.spring.io/spring-boot/3.5/system-requirements.html) and [Vite setup documentation](https://vite.dev/guide/).
+
+## Database startup readiness
+
+Compose waits for an authenticated TCP query against the application database before starting the backend. This avoids treating MySQL's temporary initialization server as ready. Flyway also retries its initial connection up to ten times.
+
+After updating the Compose configuration, run `sudo docker compose up --build` from this folder. Existing database data is preserved. If a container still exits, inspect `sudo docker compose logs --tail=100 backend mysql`.
+
+## Discovery photographs
+
+Twelve photographs are bundled in `tourmate-frontend/public/images/`, so the UI does not depend on external image hosts at runtime. Sources, authors and licenses are recorded in `public/photo-credits.json` and displayed at `/photo-credits`. Images are resized and cropped in the interface. Demo hotel/restaurant listings explicitly show Ella scenery, not venue photographs.
+
+Flyway V5 adds photo paths to seeded records with no existing cover image. Existing migrations and custom cover images are preserved. The UI also supplies matching local photos while an older backend is running. Broken cover URLs fall back to the matching bundled image, then a clear unavailable state. Rebuild with `sudo docker compose up --build -d` from `tourmate/` to update the Docker frontend and apply V5.
+
+## Geoapify integration
+
+Live search is available in Discover → **Geoapify places**. See [GEOAPIFY_SETUP.md](GEOAPIFY_SETUP.md) for key creation, configuration and test commands. Configure `GEOAPIFY_API_KEY` in `.env`, then rebuild with Compose. Search a Sri Lankan destination, category, radius and optional place name. Detail pages show available location/contact/opening-hours data with Geoapify/OpenStreetMap attribution.
+
+The MySQL catalog remains accessible under **TourMate sample places** and retains its photographs. The former Google integration has been removed. Google keys are no longer forwarded or used. Geoapify results have no invented ratings, reviews, LKR costs or venue photographs; results are not automatically imported into MySQL.
+
+### Photos on live search results
+
+Live listing photographs are resolved dynamically from each place's own Geoapify media references, through Commons files, Wikidata P18 or linked Wikipedia articles. There is no per-city/per-place image map or area-photo substitution on live listings. Author, license and source links are displayed. Cards load photos near the viewport; requests are limited to three at once, and results/details use bounded short-lived caches. Extra initial detail requests consume Geoapify credits. Places without supported media show Photo unavailable; photos for every venue are not guaranteed. See [GEOAPIFY_SETUP.md](GEOAPIFY_SETUP.md) for the lookup flow and its limits.
+
+## Interrupted Maven downloads during Docker builds
+
+An error such as `Premature end of Content-Length delimited message body` means a dependency download was cut off. The backend Dockerfile keeps Maven's repository in a BuildKit cache and allows up to three build attempts, retrying previously missing artifacts. Completed downloads survive failed builds and source changes. Use the normal build command; `--no-cache` is not needed to apply source edits.
+
+```bash
+cd tourmate
+sudo docker compose build backend
+sudo docker compose up -d backend frontend
+```
+
+The first build with the new Maven cache still needs to populate it. If downloads continue to fail, retry after the connection stabilizes. This change does not remove database volumes. The updated Docker build could not be executed from the assistant session because Docker requires the user's sudo password.
+
+## AI scheduler
+
+Use **My trips → Plan with AI** for grounded place selection, AI visit-duration reasoning, route-aware meal choices and a checked itinerary preview. Spring AI connects to Ollama; install the configured model before generating. See [AI scheduler setup and limits](AI_SCHEDULER.md).

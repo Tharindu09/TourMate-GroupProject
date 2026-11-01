@@ -1,3 +1,5 @@
+> Implementation status: the manual trip planner and schedule builder (Phases 11–12), plus estimated budget totals, are implemented in the active `tourmate/` application. Use **My trips → Plan a trip** (`/trips/plan`) for guided manual planning: basics, area-based place/meal suggestions, user-selected durations and preferences, and a route-aware schedule preview with travel times, mode-dependent routes and location/time-based meal and hotel choices, automatic breakfast/lunch/dinner suggestions and bounded travel-reducing reordering (without a global optimality guarantee). See [MANUAL_SCHEDULER.md](MANUAL_SCHEDULER.md) for usage, constraints and verification.
+
 Since you're rebuilding TourMate as an AI-powered TripAdvisor-style application, I’d implement it incrementally rather than starting with AI. The key is to get the place data + manual itinerary system correct first, because the AI planner will use those same services later.
 Target system
                          TourMate
@@ -1122,3 +1124,6 @@ And build AI in this order:
 Ollama connection → structured requirement extraction → database-backed tool calling → itinerary generation → validation → manual editing → AI replanning → embeddings/RAG later.
 
 That would also make TourMate a considerably more interesting AI engineering project than simply calling an OpenAI endpoint.
+## Implemented: AI scheduling
+
+The Spring AI/Ollama scheduler is available at `/trips/ai`, using worldwide real candidates, per-place duration reasoning, required user selections, route-context restaurant choices, actual mode-specific travel checks, bounded ordering repair, review and shared transactional persistence. Setup, model requirements, tests and practical limits are documented in [AI_SCHEDULER.md](AI_SCHEDULER.md). Local Ollama must have the configured model installed before live generation. Natural-language catalogue search and guaranteed opening-hours validation are separate future work.
