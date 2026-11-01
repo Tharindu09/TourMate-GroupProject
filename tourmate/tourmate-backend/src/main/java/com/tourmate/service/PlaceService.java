@@ -1,5 +1,9 @@
-package com.tourmate.place;
-import com.tourmate.common.PageResponse;
+package com.tourmate.service;
+
+import com.tourmate.dto.PageResponse;
+import com.tourmate.model.Place;
+import com.tourmate.model.PlaceType;
+import com.tourmate.repository.PlaceRepository;
 import java.math.BigDecimal;
 import java.util.Locale;
 import org.springframework.data.jpa.domain.Specification;

@@ -1,4 +1,5 @@
-package com.tourmate.common;
+package com.tourmate.dto;
+
 import java.util.List;
 import org.springframework.data.domain.*;
 import org.springframework.http.HttpStatus;

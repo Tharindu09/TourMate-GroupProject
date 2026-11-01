@@ -1,30 +1,28 @@
-package com.tourmate.auth;
-import com.tourmate.user.*;
-import jakarta.validation.Valid;
-import jakarta.validation.constraints.*;
+package com.tourmate.service;
+
+import com.tourmate.dto.AuthResponse;
+import com.tourmate.dto.LoginRequest;
+import com.tourmate.dto.RegisterRequest;
+import com.tourmate.dto.UserProfile;
+import com.tourmate.model.User;
+import com.tourmate.repository.UserRepository;
+import org.springframework.stereotype.Service;
 import java.time.Instant;
 import java.util.Locale;
 import org.springframework.http.*;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.jose.jws.MacAlgorithm;
 import org.springframework.security.oauth2.jwt.*;
-import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
-@RestController
-@RequestMapping("/api/auth")
-public class AuthController {
+@Service
+public class AuthService {
     private final UserRepository users;
     private final PasswordEncoder passwords;
     private final JwtEncoder encoder;
-    public AuthController(UserRepository users, PasswordEncoder passwords, JwtEncoder encoder) {
+    public AuthService(UserRepository users, PasswordEncoder passwords, JwtEncoder encoder) {
         this.users = users; this.passwords = passwords; this.encoder = encoder;
     }
-    public record Register(@NotBlank @Size(max=80) String firstName, @NotBlank @Size(max=80) String lastName,
-        @NotBlank @Email @Size(max=254) String email, @NotBlank @Size(min=8, max=72) String password) {}
-    public record Login(@NotBlank @Email @Size(max=254) String email, @NotBlank @Size(max=72) String password) {}
-    public record AuthResponse(String accessToken, String tokenType, long expiresIn, UserProfile user) {}
-    @PostMapping("/register") @ResponseStatus(HttpStatus.CREATED)
-    public AuthResponse register(@Valid @RequestBody Register body) {
+    public AuthResponse register(RegisterRequest body) {
         String email = body.email().strip().toLowerCase(Locale.ROOT);
         if (users.findByEmail(email).isPresent()) throw new ResponseStatusException(HttpStatus.CONFLICT, "Email already registered");
         checkPassword(body.password());
@@ -32,7 +30,7 @@ public class AuthController {
         user.email = email; user.passwordHash = passwords.encode(body.password());
         return token(users.saveAndFlush(user));
     }
-    @PostMapping("/login") public AuthResponse login(@Valid @RequestBody Login body) {
+    public AuthResponse login(LoginRequest body) {
         checkPassword(body.password());
         User user = users.findByEmail(body.email().strip().toLowerCase(Locale.ROOT))
             .filter(u -> passwords.matches(body.password(), u.passwordHash))

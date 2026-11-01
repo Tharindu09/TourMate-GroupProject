@@ -1,4 +1,5 @@
-package com.tourmate.destination;
+package com.tourmate.model;
+
 import jakarta.persistence.*;
 @Entity @Table(name="destinations")
 public class Destination {

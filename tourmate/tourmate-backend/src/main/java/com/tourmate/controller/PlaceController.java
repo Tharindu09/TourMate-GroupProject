@@ -1,5 +1,9 @@
-package com.tourmate.place;
-import com.tourmate.common.PageResponse;
+package com.tourmate.controller;
+
+import com.tourmate.dto.PageResponse;
+import com.tourmate.model.Place;
+import com.tourmate.model.PlaceType;
+import com.tourmate.service.PlaceService;
 import java.math.BigDecimal;
 import org.springframework.web.bind.annotation.*;
 @RestController @RequestMapping("/api/places")
