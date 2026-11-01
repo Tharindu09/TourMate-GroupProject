@@ -1,0 +1,2 @@
+ALTER TABLE trips ADD COLUMN planning_preferences LONGTEXT;
+ALTER TABLE trip_items ADD COLUMN meal_type VARCHAR(20) NOT NULL DEFAULT 'NONE';

@@ -1,0 +1,44 @@
+spring:
+  http:
+    client:
+      connect-timeout: 5s
+      read-timeout: ${OLLAMA_READ_TIMEOUT:600s}
+  ai:
+    ollama:
+      base-url: ${OLLAMA_BASE_URL:http://localhost:11434}
+      init:
+        pull-model-strategy: never
+      chat:
+        options:
+          model: ${OLLAMA_MODEL:qwen3:8b}
+          temperature: 0.2
+          format: json
+          num-predict: 1600
+          num-ctx: 8192
+    retry:
+      max-attempts: 1
+  application:
+    name: tourmate
+  datasource:
+    url: ${DB_URL:jdbc:mysql://localhost:3307/tourmate}
+    username: ${DB_USERNAME:tourmate}
+    password: ${DB_PASSWORD:tourmate_local}
+  jpa:
+    open-in-view: false
+    hibernate:
+      ddl-auto: validate
+  flyway:
+    enabled: true
+server:
+  port: 8080
+  error:
+    include-message: never
+app:
+  jwt-secret: ${JWT_SECRET}
+  cors-origin: ${CORS_ORIGIN:http://localhost:5173}
+  geoapify:
+    api-key: ${GEOAPIFY_API_KEY:}
+  rapidapi:
+    api-key: ${RAPIDAPI_KEY:}
+    travel-host: ${RAPIDAPI_TRAVEL_HOST:travel-advisor.p.rapidapi.com}
+    booking-host: ${RAPIDAPI_BOOKING_HOST:booking-com18.p.rapidapi.com}
