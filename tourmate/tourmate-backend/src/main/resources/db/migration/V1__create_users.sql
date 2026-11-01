@@ -1,0 +1,8 @@
+CREATE TABLE users (
+ id BIGINT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+ first_name VARCHAR(80) NOT NULL, last_name VARCHAR(80) NOT NULL,
+ email VARCHAR(254) NOT NULL, password_hash VARCHAR(255) NOT NULL,
+ profile_image_url VARCHAR(1000), role VARCHAR(20) NOT NULL DEFAULT 'USER',
+ created_at TIMESTAMP(6) NOT NULL, updated_at TIMESTAMP(6) NOT NULL,
+ CONSTRAINT uk_users_email UNIQUE(email), CONSTRAINT ck_users_role CHECK(role IN ('USER','ADMIN'))
+);
