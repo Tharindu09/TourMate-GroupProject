@@ -1,0 +1,110 @@
+{
+  "ella": {
+    "src": "/images/ella.jpg",
+    "alt": "Ella, Sri Lanka",
+    "author": "Dan arndt",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+    "source": "https://commons.wikimedia.org/wiki/File:Ella_railway_station.jpg",
+    "modifications": "Resized by Wikimedia; cropped to fit in the interface."
+  },
+  "kandy": {
+    "src": "/images/kandy.jpg",
+    "alt": "Kandy, Sri Lanka",
+    "author": "A.Savin",
+    "license": "FAL",
+    "licenseUrl": "http://artlibre.org/licence/lal/en",
+    "source": "https://commons.wikimedia.org/wiki/File:SL_Kandy_asv2020-01_img04_Queens_Hotel.jpg",
+    "modifications": "Resized by Wikimedia; cropped to fit in the interface."
+  },
+  "galle-fort": {
+    "src": "/images/galle-fort.jpg",
+    "alt": "Galle Fort, Sri Lanka",
+    "author": "Rovin Shanila",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+    "source": "https://commons.wikimedia.org/wiki/File:Galle_Fort.jpg",
+    "modifications": "Resized by Wikimedia; cropped to fit in the interface."
+  },
+  "sigiriya": {
+    "src": "/images/sigiriya.jpg",
+    "alt": "Sigiriya, Sri Lanka",
+    "author": "Wrobell",
+    "license": "CC BY-SA 3.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0",
+    "source": "https://commons.wikimedia.org/wiki/File:Sigiriya_(141688197).jpeg",
+    "modifications": "Resized by Wikimedia; cropped to fit in the interface."
+  },
+  "nuwara-eliya": {
+    "src": "/images/nuwara-eliya.jpg",
+    "alt": "Nuwara Eliya, Sri Lanka",
+    "author": "Abdul malik77",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+    "source": "https://commons.wikimedia.org/wiki/File:NuwaraEliya_from_top.jpg",
+    "modifications": "Resized by Wikimedia; cropped to fit in the interface."
+  },
+  "mirissa": {
+    "src": "/images/mirissa.jpg",
+    "alt": "Mirissa, Sri Lanka",
+    "author": "Ji-Elle",
+    "license": "CC BY-SA 3.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0",
+    "source": "https://commons.wikimedia.org/wiki/File:Mirissa-Plage_(3).jpg",
+    "modifications": "Resized by Wikimedia; cropped to fit in the interface."
+  },
+  "colombo": {
+    "src": "/images/colombo.png",
+    "alt": "Colombo, Sri Lanka",
+    "author": "Gihanud2001",
+    "license": "CC0",
+    "licenseUrl": "http://creativecommons.org/publicdomain/zero/1.0/deed.en",
+    "source": "https://commons.wikimedia.org/wiki/File:Colombo_city_skyline_at_night.png",
+    "modifications": "Resized by Wikimedia; cropped to fit in the interface."
+  },
+  "nine-arch-bridge": {
+    "src": "/images/nine-arch-bridge.jpg",
+    "alt": "Nine Arch Bridge, Sri Lanka",
+    "author": "MichaelJames2468",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+    "source": "https://commons.wikimedia.org/wiki/File:The_Nine_Arches_Bridge.jpg",
+    "modifications": "Resized by Wikimedia; cropped to fit in the interface."
+  },
+  "ravana-falls": {
+    "src": "/images/ravana-falls.jpg",
+    "alt": "Ravana Falls, Sri Lanka",
+    "author": "A.Savin",
+    "license": "FAL",
+    "licenseUrl": "http://artlibre.org/licence/lal/en",
+    "source": "https://commons.wikimedia.org/wiki/File:SL_Ella_asv2020-01_img01_Ravana_Falls.jpg",
+    "modifications": "Resized by Wikimedia; cropped to fit in the interface."
+  },
+  "kandy-lake": {
+    "src": "/images/kandy-lake.jpg",
+    "alt": "Kandy Lake, Sri Lanka",
+    "author": "Ji-Elle",
+    "license": "CC BY-SA 3.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0",
+    "source": "https://commons.wikimedia.org/wiki/File:Kandy_Lake_(9).jpg",
+    "modifications": "Resized by Wikimedia; cropped to fit in the interface."
+  },
+  "victoria-park": {
+    "src": "/images/victoria-park.jpg",
+    "alt": "Victoria Park, Sri Lanka",
+    "author": "Sandunruki at English Wikipedia",
+    "license": "CC BY 3.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by/3.0",
+    "source": "https://commons.wikimedia.org/wiki/File:Victoria_Park,_by_Sandunruki.jpg",
+    "modifications": "Resized by Wikimedia; cropped to fit in the interface."
+  },
+  "little-adams-peak": {
+    "src": "/images/little-adams-peak.jpg",
+    "alt": "Little Adams Peak, Sri Lanka",
+    "author": "Gayan Perera",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+    "source": "https://commons.wikimedia.org/wiki/File:Little_adams_peak,_Ella_Sri_Lanka.jpg",
+    "modifications": "Resized by Wikimedia; cropped to fit in the interface."
+  }
+}
