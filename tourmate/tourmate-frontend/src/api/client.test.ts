@@ -15,6 +15,15 @@ describe('API client', () => {
  });
  it('handles non-JSON failures without swallowing the error', async () => {
   vi.stubGlobal('fetch', vi.fn().mockResolvedValue(new Response('Bad Gateway', {status: 502})));
-  await expect(api('/places')).rejects.toThrow('Unable to complete');
+  await expect(api('/places')).rejects.toThrow('backend is unavailable (502)');
  });
+ it('distinguishes server errors from invalid credentials',async()=>{
+  vi.stubGlobal('fetch',vi.fn().mockResolvedValue(new Response('',{status:500})));
+  await expect(api('/auth/login')).rejects.toThrow('server error (500)');
+ });
+ it('explains connection failures',async()=>{
+  vi.stubGlobal('fetch',vi.fn().mockRejectedValue(new TypeError('Failed to fetch')));
+  await expect(api('/auth/login')).rejects.toThrow('Cannot connect to TourMate');
+ });
+
 });
